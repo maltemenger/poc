@@ -5,7 +5,10 @@ from langchain_core.prompts import PromptTemplate
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_community.vectorstores import Chroma
 from langchain.chains import RetrievalQA, LLMChain
-from langchain.text_splitter import CharacterTextSplitter, RecursiveCharacterTextSplitter
+from langchain.text_splitter import (
+    CharacterTextSplitter,
+    RecursiveCharacterTextSplitter,
+)
 from langchain_community.llms import GPT4All
 from langchain.retrievers import ContextualCompressionRetriever
 from langchain.retrievers.document_compressors import LLMChainExtractor
@@ -18,13 +21,15 @@ text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=10
 splitted_docs = text_splitter.split_documents(docs)
 
 
-embeddings = HuggingFaceEmbeddings(model_name='sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+)
 
 chroma_db = Chroma.from_documents(
     documents=splitted_docs,
     embedding=embeddings,
     persist_directory="data",
-    collection_name="lc_chroma_demo2"
+    collection_name="lc_chroma_demo2",
 )
 
 template = """
@@ -37,15 +42,11 @@ Frage: {question}
 """
 
 
-
 query = "welche workshops werden von der Capgemini geplant und welchen Mehrwert haben die für die N-ergie?"
 
 query = input("Frage eingeben: ")
 
-similar_docs = chroma_db.similarity_search(
-    query=query,
-    k=5
-)
+similar_docs = chroma_db.similarity_search(query=query, k=5)
 
 
 context = ""
@@ -54,13 +55,12 @@ for doc in similar_docs:
 
 
 gpt4all_path = "C:\ki\sim2\models\mistral-7b-openorca.Q4_0.gguf"
-llm = GPT4All(model=gpt4all_path,  n_threads=8)
+llm = GPT4All(model=gpt4all_path, n_threads=4)
 
-qa_chain = RetrievalQA.from_chain_type(
-    llm,
-    retriever=chroma_db.as_retriever()
-)
+qa_chain = RetrievalQA.from_chain_type(llm, retriever=chroma_db.as_retriever())
 
-prompt = PromptTemplate(template=template, input_variables=["context" "question"]).partial(context=context)
+prompt = PromptTemplate(
+    template=template, input_variables=["context" "question"]
+).partial(context=context)
 llm_chain = LLMChain(prompt=prompt, llm=llm)
 print(llm_chain.invoke(query))
