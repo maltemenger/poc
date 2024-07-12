@@ -15,6 +15,7 @@ huggingface-hub = "*"
 black = "*"
 sentence-transformers = "*"
 flask = "*"
+dataclasses = "*"
 
 [dev-packages]
 

@@ -12,16 +12,13 @@ class Vectorizer:
     )
     chroma_db = Chroma(persist_directory="./data", embedding_function=embeddings)
 
-
-    def get_chunks(self, query, num_chunks):
-        #similar_docs = self.chroma_db.similarity_search(query=query, k=num_chunks)
+    def get_chunks(self, query: str, num_chunks: int) -> list[Chunk]:
         similar_docs = self.chroma_db.similarity_search_with_score(query=query, k=num_chunks)
         all_docs = []
 
         for doc, score in similar_docs:
             chunk = Chunk(doc.page_content, doc.metadata["page"] + 1, doc.metadata["source"], score)
             all_docs.append(chunk)
-
 
         sorted_docs = sorted(all_docs, key=lambda doc: doc.score)
 
