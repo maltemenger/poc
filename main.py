@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 
-from internal_gpt import InternalGPT
 from models.expecations import are_all_expectations_met, build_expecation_test_response, create_testcase_from_dict, \
     Testresult
 from vectorizer import Vectorizer
@@ -43,18 +42,4 @@ def execute_tests():
     return jsonify(test_result), 200
 
 
-@app.route("/")
-def answer_question():
-    internal_gpt = InternalGPT()
-    response = internal_gpt.answer_question(query='query')
-    return response
 
-
-@app.route("/process_question", methods=["POST"])
-def process_question():
-    payload = request.get_json()
-    question = payload['data']
-    internal_gpt = InternalGPT()
-    print("!!!!")
-    print(question)
-    return internal_gpt.answer_question(query=question)
