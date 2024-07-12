@@ -1,17 +1,12 @@
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_core.callbacks import BaseCallbackManager, StreamingStdOutCallbackHandler
-from langchain_core.prompts import PromptTemplate
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-from langchain_community.vectorstores import Chroma
 from langchain.chains import RetrievalQA, LLMChain
 from langchain.text_splitter import (
-    CharacterTextSplitter,
     RecursiveCharacterTextSplitter,
 )
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.llms import GPT4All
-from langchain.retrievers import ContextualCompressionRetriever
-from langchain.retrievers.document_compressors import LLMChainExtractor
+from langchain_community.vectorstores import Chroma
+from langchain_core.prompts import PromptTemplate
 
 loader = PyPDFLoader("data/entwicklungsrichtlinien.pdf")
 docs = loader.load()

@@ -40,8 +40,8 @@ class InternalGPT:
         Question: {question}
         
         """
-
-
+        print("QUERY")
+        print(query)
         similar_docs = chroma_db.similarity_search(query=query, k=2)
 
         context = ""
