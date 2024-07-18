@@ -1,4 +1,6 @@
 # 1.Setup
+- Install pipenv
+- Install dependencies
 
 ## 1.1 Add Datasources
 - create folder --> .data
