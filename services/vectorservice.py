@@ -10,8 +10,10 @@ class VectorService:
         all_docs = []
 
         for doc, score in similar_docs:
-            chunk = Chunk(doc.page_content, doc.metadata["page"] + 1, doc.metadata["source"], score)
-            all_docs.append(chunk)
+            if doc.metadata.get("page") is not None and doc.metadata.get("source") is not None:
+                chunk = Chunk(doc.page_content, doc.metadata["page"] + 1, doc.metadata["source"], score)
+                all_docs.append(chunk)
+                print(doc.metadata["source"])
 
         sorted_docs = sorted(all_docs, key=lambda doc: doc.score)
 

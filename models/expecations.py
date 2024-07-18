@@ -41,7 +41,7 @@ class TestcaseService:
         expected_pages = expectation.pages
 
         filtered_chunks_by_expected_document = list(
-            filter(lambda chunk: chunk.source_doc == "data/" + expected_source_doc, similarity_chunks))
+            filter(lambda chunk: chunk.source_doc == "../data/" + expected_source_doc, similarity_chunks))
         return all(page in [doc.page for doc in filtered_chunks_by_expected_document] for page in expected_pages)
 
     def are_all_expectations_met(self, similarity_chunks: list[Chunk], expectations: list[Expectation]) -> bool:

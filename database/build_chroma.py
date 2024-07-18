@@ -2,34 +2,37 @@ from langchain.text_splitter import (
     RecursiveCharacterTextSplitter,
 )
 from langchain_community.document_loaders import PyPDFLoader
-from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
+from langchain_core.documents import Document
 
 from database.chroma_config import ChromaConfig
 
-print('Scanne Dokument ein.')
-loader = PyPDFLoader("../data/g1.pdf")
-docs = loader.load()
 
-docs[0].metadata['tag'] = 'g1'
+class ChromaService:
+    def add_tags(self, item: Document, tag: str):
+        item.metadata['tag'] = tag
+        return item
+    def build_chroma_from_document(self, document_path: str, tag: str):
+        print('Building Chroma')
+        loader = PyPDFLoader(document_path)
+        docs = loader.load()
+        docs_with_metadata = list(map(lambda x: self.add_tags(x, tag), docs))
 
-# split it into chunks
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=1200, chunk_overlap=100)
-splitted_docs = text_splitter.split_documents(docs)
-print(splitted_docs[0])
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=2400, chunk_overlap=200)
+        splitted_docs = text_splitter.split_documents(docs_with_metadata)
 
-config = ChromaConfig()
+        config = ChromaConfig()
 
-embeddings = HuggingFaceEmbeddings(
-    model_name="danielheinz/e5-base-sts-en-de"
-)
+        Chroma.from_documents(
+            documents=splitted_docs,
+            embedding=config.embeddings,
+            collection_name=config.collection_name,
+            persist_directory=config.persist_directory
+        )
+        print('Finished building Chroma')
 
-print("Befülle ChromaDb.")
-chroma_db = Chroma.from_documents(
-    documents=splitted_docs,
-    embedding=config.embeddings,
-    collection_name=config.collection_name,
-    persist_directory=config.persist_directory
-    )
 
-print("Vectorisierung abgeschlossen.")
+
+
+newChroma = ChromaService()
+newChroma.build_chroma_from_document('../data/g1.pdf', 'g1')

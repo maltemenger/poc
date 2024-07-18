@@ -24,7 +24,7 @@ def execute_tests():
     testcase_service = TestcaseService()
 
     for testcase in testcases:
-        similarity_chunks = VectorService.get_chunks(testcase.question, 15)
+        similarity_chunks = VectorService.get_chunks(testcase.question, 5000)
         expectations_for_testcase_met = testcase_service.are_all_expectations_met(similarity_chunks, testcase.expectations)
 
         if expectations_for_testcase_met:
