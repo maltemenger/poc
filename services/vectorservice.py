@@ -5,10 +5,8 @@ from models.chunk import Chunk
 class VectorService:
     @staticmethod
     def get_chunks(query: str, num_chunks: int) -> list[Chunk]:
-
         chroma = ChromaClient()
         similar_docs = chroma.similarity_search_with_score(query=query, num_chunks=num_chunks)
-
         all_docs = []
 
         for doc, score in similar_docs:
