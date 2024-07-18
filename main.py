@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 
-from models.expecations import TestcaseService, Testresult
-from services.vectorservice import VectorService
+from services.testcase_service import TestcaseService
+from models.testcase import Testresult
+from services.chroma_service import ChromaService
 
 app = Flask(__name__)
 
@@ -10,7 +11,7 @@ app = Flask(__name__)
 def execute_test():
     payload = request.get_json()
     testcase = TestcaseService.create_testcase_from_dict(payload)
-    similarity_chunks = VectorService.get_chunks(testcase.question, 15)
+    similarity_chunks = ChromaService.get_chunks(testcase.question, 15)
     expectations_met = TestcaseService.are_all_expectations_met(similarity_chunks, testcase.expectations)
     response_data = TestcaseService.build_expecation_test_response(similarity_chunks, expectations_met)
     return jsonify(response_data), 200
@@ -24,8 +25,10 @@ def execute_tests():
     testcase_service = TestcaseService()
 
     for testcase in testcases:
-        similarity_chunks = VectorService.get_chunks(testcase.question, 5000)
-        expectations_for_testcase_met = testcase_service.are_all_expectations_met(similarity_chunks, testcase.expectations)
+        similarity_chunks = ChromaService.get_chunks(testcase.question, 15, {"tag": "g1"})
+        print(similarity_chunks)
+        expectations_for_testcase_met = testcase_service.are_all_expectations_met(similarity_chunks=similarity_chunks,
+                                                                                  expectations=testcase.expectations)
 
         if expectations_for_testcase_met:
             test_result.successful.append(testcase.question)
@@ -35,6 +38,3 @@ def execute_tests():
             test_result.failCount += 1
 
     return jsonify(test_result), 200
-
-
-

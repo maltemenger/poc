@@ -9,7 +9,8 @@ from database.chroma_config import ChromaConfig
 class ChromaClient:
     def __init__(self):
         config = ChromaConfig()
-        self.localChroma = Chroma(persist_directory="data", collection_name=config.collection_name, embedding_function=config.embeddings)
+        self.localChroma = Chroma(persist_directory="data", collection_name=config.collection_name,
+                                  embedding_function=config.embeddings)
 
     def query_chroma(self, question: str) -> list[Document]:
         return self.localChroma.similarity_search(question)
