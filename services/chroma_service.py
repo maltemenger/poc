@@ -13,7 +13,7 @@ from models.chunk import Chunk
 
 
 class ChromaService:
-    def add_tags(self, item: Document, tag: str):
+    def add_tag(self, item: Document, tag: str):
         item.metadata['tag'] = tag
         return item
 
@@ -21,7 +21,7 @@ class ChromaService:
         print(f"Add Document - {document_path} with tag {tag}")
         loader = PyPDFLoader(document_path)
         docs = loader.load()
-        docs_with_metadata = list(map(lambda x: self.add_tags(x, tag), docs))
+        docs_with_metadata = list(map(lambda x: self.add_tag(x, tag), docs))
 
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=2400, chunk_overlap=200)
         splitted_docs = text_splitter.split_documents(docs_with_metadata)

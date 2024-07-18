@@ -8,5 +8,5 @@ class ChromaConfig:
     embeddings: Embeddings = HuggingFaceEmbeddings(
         model_name="danielheinz/e5-base-sts-en-de"
     )
-    persist_directory = "../data"
+    persist_directory = "./data"
     collection_name = "ubahn"

@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify
 
-from services.testcase_service import TestcaseService
 from models.testcase import Testresult
 from services.chroma_service import ChromaService
+from services.testcase_service import TestcaseService
 
 app = Flask(__name__)
 
@@ -38,3 +38,11 @@ def execute_tests():
             test_result.failCount += 1
 
     return jsonify(test_result), 200
+
+@app.route("/initialize_data", methods=["POST"])
+def load_data():
+    new_chroma = ChromaService()
+    new_chroma.add_document('./data/g1.pdf', 'g1')
+    new_chroma.add_document('./data/netznutzungsvertrag.pdf', 'netz')
+
+    return "success", 200

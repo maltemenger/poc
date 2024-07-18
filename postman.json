@@ -1,0 +1,49 @@
+{
+	"info": {
+		"_postman_id": "e328cccd-be9d-4cd0-bc64-48960b381658",
+		"name": "similarity_search",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "test multiple expectations",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n    \"question\": \"Welche Schalter und Drehtaster im G1 sind verplombt?\",\r\n    \"expectations\": [\r\n        {\r\n            \"pages\": [48],\r\n            \"source_doc\": \"g1.pdf\"\r\n    }\r\n    ]\r\n}\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/testExpectations",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"testExpectations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "initialize_data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		}
+	]
+}
