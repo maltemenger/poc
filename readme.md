@@ -17,9 +17,9 @@
 ## 1.4 Execute Tests
 - Execute tests in postman: test multiple expectations
 
-payload example: 
+payload example:
 [
-    {
+        {
     "question": "Welche Schalter und Drehtaster im G1 sind verplombt?",
     "expectations": [
         {
